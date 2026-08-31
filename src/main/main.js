@@ -6,7 +6,7 @@ import { createStore } from './store.js';
 import { createScheduler } from './scheduler.js';
 import { createWidgetWindow, createSettingsWindow } from './windows.js';
 import { registerIpcHandlers } from './ipc.js';
-import { fetchRate } from '../scraper/googleRateScraper.js';
+import { fetchRate } from '../scraper/rateApiClient.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const preloadPath = path.join(__dirname, '../preload/preload.cjs');

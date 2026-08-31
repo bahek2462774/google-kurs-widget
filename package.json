@@ -1,7 +1,7 @@
 {
   "name": "google-kurs-widget",
   "version": "0.1.0",
-  "description": "Desktop currency-rate widget for macOS (Electron) showing rates scraped from Google search results",
+  "description": "Desktop currency-rate widget for macOS (Electron) showing rates from a personal read-only rate API",
   "type": "module",
   "main": "src/main/main.js",
   "scripts": {
@@ -15,9 +15,7 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "cheerio": "^1.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "electron": "^33.0.0",
     "electron-builder": "^25.1.8",

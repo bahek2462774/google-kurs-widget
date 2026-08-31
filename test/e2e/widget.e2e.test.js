@@ -9,10 +9,7 @@ import { _electron as electron } from 'playwright';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.join(__dirname, '../..');
-const fixtureHtml = readFileSync(
-  path.join(projectRoot, 'test/fixtures/google-serp-usd-rub-ru-locale.html'),
-  'utf8'
-);
+const FIXTURE_RATE = 85.91;
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -39,9 +36,10 @@ async function waitForConfig(configPath, predicate, { timeoutMs = 5000, interval
 
 function startFixtureServer() {
   return new Promise((resolve) => {
-    const server = http.createServer((_req, res) => {
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-      res.end(fixtureHtml);
+    const server = http.createServer((req, res) => {
+      const pair = req.url.split('/').pop();
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ pair, rate: FIXTURE_RATE, updatedAt: new Date().toISOString(), ageSec: 1, stale: false }));
     });
     server.listen(0, '127.0.0.1', () => resolve({ server, port: server.address().port }));
   });
@@ -54,7 +52,7 @@ async function launchApp() {
     args: [projectRoot],
     env: {
       ...process.env,
-      GOOGLE_BASE_URL: `http://127.0.0.1:${port}`,
+      RATE_API_BASE_URL: `http://127.0.0.1:${port}`,
       GKW_USER_DATA_DIR: userDataDir
     }
   });
