@@ -1,0 +1,12 @@
+node_modules/
+dist/
+build/
+.DS_Store
+npm-debug.log*
+*.log
+.env
+.vscode/
+.idea/
+*.pem
+test-results/
+playwright-report/

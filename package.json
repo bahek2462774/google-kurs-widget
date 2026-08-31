@@ -1,0 +1,37 @@
+{
+  "name": "google-kurs-widget",
+  "version": "0.1.0",
+  "description": "Desktop currency-rate widget for macOS (Electron) showing rates scraped from Google search results",
+  "type": "module",
+  "main": "src/main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "node --test \"test/unit/**/*.test.js\"",
+    "test:e2e": "node --test \"test/e2e/**/*.test.js\"",
+    "test:live": "node test/manual/live-smoke-test.js",
+    "build": "electron-builder --mac --dir",
+    "build:dmg": "electron-builder --mac"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8",
+    "playwright": "^1.61.1"
+  },
+  "build": {
+    "appId": "com.bahek2462774.google-kurs-widget",
+    "productName": "Google Kurs Widget",
+    "mac": {
+      "category": "public.app-category.finance"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><title>Unexpected markup drift fixture</title></head>
+<body>
+  <!-- Deliberately unrelated markup: simulates Google changing the currency
+       panel's structure entirely, or returning an error page. No
+       [data-exchange-rate] present -- parseGoogleSerp must return null
+       without throwing. -->
+  <div class="some-totally-different-layout">
+    <span class="rate-ish-looking-thing">85.91</span>
+  </div>
+</body>
+</html>

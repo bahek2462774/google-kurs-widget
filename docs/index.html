@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>google-kurs-widget</title>
+<style>
+  :root {
+    --bg: #f5f5f7;
+    --card: #ffffff;
+    --text: #1c1c1e;
+    --muted: #6b6b70;
+    --accent: #0b57d0;
+    --border: #e2e2e6;
+    --warn-bg: #fff4e5;
+    --warn-border: #f0b458;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+  }
+  main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 20px 80px;
+  }
+  h1 {
+    font-size: 30px;
+    margin: 0 0 6px;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 16px;
+    margin: 0 0 32px;
+  }
+  h2 {
+    font-size: 19px;
+    margin: 40px 0 12px;
+  }
+  .shots {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  .shots figure {
+    margin: 0;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+  }
+  .shots img {
+    display: block;
+    max-width: 100%;
+    border-radius: 8px;
+  }
+  .shots figcaption {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+  }
+  .widget-shot img { width: 260px; }
+  .settings-shot img { width: 300px; }
+  .warning {
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 14px;
+  }
+  .warning strong { display: block; margin-bottom: 4px; }
+  pre {
+    background: #1c1c1e;
+    color: #f2f2f2;
+    padding: 14px 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 13px;
+  }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  ol, ul { padding-left: 22px; }
+  a { color: var(--accent); }
+  footer {
+    margin-top: 56px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>google-kurs-widget</h1>
+  <p class="subtitle">Виджет курса валют для рабочего стола macOS</p>
+
+  <p>Небольшое Electron-приложение, которое показывает курсы выбранных валютных пар прямо на рабочем столе и обновляет их автоматически с настраиваемым интервалом.</p>
+
+  <div class="shots">
+    <figure class="widget-shot">
+      <img src="assets/widget.png" alt="Виджет с курсами USD→RUB и EUR→RUB" />
+      <figcaption>Виджет на рабочем столе</figcaption>
+    </figure>
+    <figure class="settings-shot">
+      <img src="assets/settings.png" alt="Окно настроек: список пар и интервал обновления" />
+      <figcaption>Окно настроек</figcaption>
+    </figure>
+  </div>
+
+  <h2>Как это работает</h2>
+  <p>Внизу виджета — мелкая серая надпись «Обновлено: HH:MM», отражающая время последнего <em>успешного</em> обновления. Если очередное обновление не удалось, виджет продолжает показывать последний известный курс, а не ошибку или пустоту.</p>
+
+  <div class="warning">
+    <strong>Важно понимать перед установкой</strong>
+    Курс берётся парсингом страницы выдачи Google (<code>google.com/search?q=USD+to+RUB</code>) — это не официальный API, и это нарушает условия использования Google. Разметка страницы может измениться в любой момент и сломать парсер; анонимные запросы иногда упираются в cookie-стену. Гарантий точности или доступности нет — используйте на свой риск.
+  </div>
+
+  <h2>Установка</h2>
+  <ol>
+    <li>Поставьте <a href="https://nodejs.org/">Node.js</a> (20 или новее).</li>
+    <li>Склонируйте репозиторий и установите зависимости:</li>
+  </ol>
+  <pre><code>git clone git@github.com:bahek2462774/google-kurs-widget.git
+cd google-kurs-widget
+npm install
+npm start</code></pre>
+  <p>Приложение запустится, на рабочем столе появится плавающее окно виджета. Никакого Apple Developer аккаунта для локального запуска не требуется.</p>
+
+  <h2>Настройка пар и интервала</h2>
+  <p>Нажмите на шестерёнку (⚙) в правом верхнем углу виджета — откроется окно настроек, где можно:</p>
+  <ul>
+    <li>добавить валютную пару (например <code>USD</code> → <code>RUB</code>);</li>
+    <li>удалить ненужную пару;</li>
+    <li>изменить интервал автообновления в минутах (по умолчанию 30).</li>
+  </ul>
+
+  <h2>Сборка отдельного приложения</h2>
+  <p>Если не хочется держать терминал открытым, можно собрать обычное <code>.app</code>:</p>
+  <pre><code>npm run build       # dist/mac-arm64/*.app
+npm run build:dmg   # .dmg-образ</code></pre>
+  <p>Приложение не подписано Developer ID, поэтому при первом запуске macOS Gatekeeper покажет предупреждение «нельзя проверить разработчика» — откройте через правый клик на <code>.app</code> → «Открыть».</p>
+
+  <h2>Ограничения MVP</h2>
+  <ul>
+    <li>Виджет — плавающее окно поверх рабочего стола (frameless, always-on-top), а не системный WidgetKit-виджет в Центре уведомлений.</li>
+    <li>Обновление курса зависит от того, отдаёт ли Google обычную выдачу анонимному запросу (без cookie согласия результат не гарантирован).</li>
+  </ul>
+
+  <footer>
+    Исходный код и issues: <a href="https://github.com/bahek2462774/google-kurs-widget">github.com/bahek2462774/google-kurs-widget</a>
+  </footer>
+</main>
+</body>
+</html>

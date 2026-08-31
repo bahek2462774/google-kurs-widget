@@ -1,0 +1,86 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 20px 24px;
+  color: #1c1c1e;
+  background: #f5f5f7;
+}
+
+h1 {
+  font-size: 18px;
+  margin: 0 0 16px;
+}
+
+h2 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6b6b70;
+  margin: 0 0 8px;
+}
+
+section {
+  margin-bottom: 22px;
+}
+
+.pairs-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px;
+}
+
+.pairs-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: #fff;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.pairs-list button {
+  border: none;
+  background: transparent;
+  color: #ff3b30;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.add-pair-form,
+.interval-form {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+input[type='text'],
+input[type='number'] {
+  padding: 6px 8px;
+  border: 1px solid #d1d1d6;
+  border-radius: 6px;
+  font-size: 14px;
+  width: 70px;
+}
+
+button[type='submit'] {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background: #0b57d0;
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.error {
+  color: #ff3b30;
+  font-size: 12px;
+  min-height: 16px;
+  margin: 6px 0 0;
+}

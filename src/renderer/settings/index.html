@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline';" />
+  <title>Настройки — Google Kurs Widget</title>
+  <link rel="stylesheet" href="settings.css" />
+</head>
+<body>
+  <h1>Настройки</h1>
+
+  <section>
+    <h2>Валютные пары</h2>
+    <ul id="pairsList" class="pairs-list"></ul>
+
+    <form id="addPairForm" class="add-pair-form">
+      <input type="text" id="fromInput" placeholder="USD" maxlength="6" required />
+      <span>→</span>
+      <input type="text" id="toInput" placeholder="RUB" maxlength="6" required />
+      <button type="submit">Добавить</button>
+    </form>
+    <p class="error" id="pairError"></p>
+  </section>
+
+  <section>
+    <h2>Интервал обновления</h2>
+    <form id="intervalForm" class="interval-form">
+      <input type="number" id="intervalInput" min="1" step="1" />
+      <span>мин.</span>
+      <button type="submit">Сохранить</button>
+    </form>
+    <p class="error" id="intervalError"></p>
+  </section>
+
+  <script type="module" src="settings.js"></script>
+</body>
+</html>
