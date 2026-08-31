@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 
 import { formatLastUpdated, formatRate, latestSuccessfulUpdate } from '../../src/renderer/shared/format.js';
 
-test('formatLastUpdated: no date -> "never updated"', () => {
-  assert.equal(formatLastUpdated(null), 'Ещё не обновлялось');
-  assert.equal(formatLastUpdated(undefined), 'Ещё не обновлялось');
-  assert.equal(formatLastUpdated('not-a-date'), 'Ещё не обновлялось');
+test('formatLastUpdated: no date -> shows a loading state, not a dead-end message', () => {
+  assert.equal(formatLastUpdated(null), 'Загрузка…');
+  assert.equal(formatLastUpdated(undefined), 'Загрузка…');
+  assert.equal(formatLastUpdated('not-a-date'), 'Загрузка…');
 });
 
 test('formatLastUpdated: formats HH:MM, zero-padded', () => {

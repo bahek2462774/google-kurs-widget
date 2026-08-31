@@ -30,10 +30,14 @@ export function createScheduler({
     try {
       const pairs = store.getPairs();
       const locale = store.getConfig().locale;
-      for (const pair of pairs) {
+      for (const [index, pair] of pairs.entries()) {
         const result = await fetchRate(pair.from, pair.to, { locale });
         await store.updatePairResult(pair.id, result);
-        if (delayBetweenPairsMs > 0) await sleep(delayBetweenPairsMs);
+        // Only pace requests *between* pairs -- a trailing delay after the
+        // last one just makes the widget's first paint (and every refresh)
+        // slower for no benefit, since no further request follows it.
+        const isLast = index === pairs.length - 1;
+        if (!isLast && delayBetweenPairsMs > 0) await sleep(delayBetweenPairsMs);
       }
       onRatesUpdated?.(store.getPairs());
       return { skipped: false };

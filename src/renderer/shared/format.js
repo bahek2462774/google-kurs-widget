@@ -1,7 +1,7 @@
 export function formatLastUpdated(date) {
-  if (!date) return 'Ещё не обновлялось';
+  if (!date) return 'Загрузка…';
   const d = date instanceof Date ? date : new Date(date);
-  if (Number.isNaN(d.getTime())) return 'Ещё не обновлялось';
+  if (Number.isNaN(d.getTime())) return 'Загрузка…';
   const hh = String(d.getHours()).padStart(2, '0');
   const mm = String(d.getMinutes()).padStart(2, '0');
   return `Обновлено: ${hh}:${mm}`;
