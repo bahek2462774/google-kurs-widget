@@ -11,7 +11,12 @@
 
   <section>
     <h2>Валютные пары</h2>
+    <p class="hint">Перетаскивайте, чтобы изменить порядок</p>
     <ul id="pairsList" class="pairs-list"></ul>
+
+    <select id="catalogSelect" class="catalog-select">
+      <option value="">— выбрать из списка (например USD - RUB) —</option>
+    </select>
 
     <form id="addPairForm" class="add-pair-form">
       <input type="text" id="fromInput" placeholder="USD" maxlength="6" required />

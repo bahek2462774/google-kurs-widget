@@ -36,12 +36,28 @@ section {
 .pairs-list li {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 8px;
   padding: 6px 10px;
   background: #fff;
   border-radius: 8px;
   margin-bottom: 6px;
   font-size: 14px;
+  cursor: grab;
+}
+
+.pairs-list li.dragging {
+  opacity: 0.4;
+}
+
+.drag-handle {
+  color: #b0b0b6;
+  font-size: 14px;
+  line-height: 1;
+  user-select: none;
+}
+
+.pair-label {
+  flex: 1;
 }
 
 .pairs-list button {
@@ -50,6 +66,24 @@ section {
   color: #ff3b30;
   cursor: pointer;
   font-size: 13px;
+}
+
+.hint {
+  font-size: 12px;
+  color: #8a8a8e;
+  margin: 0 0 8px;
+}
+
+.catalog-select {
+  display: block;
+  width: 100%;
+  padding: 6px 8px;
+  margin-bottom: 8px;
+  border: 1px solid #d1d1d6;
+  border-radius: 6px;
+  font-size: 13px;
+  background: #fff;
+  color: #1c1c1e;
 }
 
 .add-pair-form,

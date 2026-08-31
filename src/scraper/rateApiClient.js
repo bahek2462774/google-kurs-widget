@@ -51,3 +51,28 @@ export async function fetchRate(fromCurrency, toCurrency, { timeoutMs = 10000 } 
     clearTimeout(timer);
   }
 }
+
+/**
+ * Never throws. Returns an array of { pair, label } (possibly empty) on
+ * success or failure alike -- the catalog is a "nice to have" for the
+ * add-pair picker, never something that should block manual entry.
+ */
+export async function fetchPairsCatalog({ timeoutMs = 10000 } = {}) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(`${baseUrl()}/google-kurs-widget/pairs`, { signal: controller.signal });
+    if (!response.ok) {
+      console.warn(`[rate-api] pairs catalog: HTTP ${response.status}`);
+      return [];
+    }
+    const data = await response.json();
+    return Array.isArray(data?.pairs) ? data.pairs : [];
+  } catch (err) {
+    console.warn(`[rate-api] pairs catalog: request failed: ${err.message}`);
+    return [];
+  } finally {
+    clearTimeout(timer);
+  }
+}

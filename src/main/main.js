@@ -70,24 +70,22 @@ async function main() {
   // returns a deep clone, so no extra cloning is needed here.)
   const preRefreshSnapshot = store.getPairs();
 
+  function broadcastPairs(pairs = store.getPairs()) {
+    if (widgetWindow && !widgetWindow.isDestroyed()) {
+      widgetWindow.webContents.send('rates:updated', pairs);
+    }
+  }
+
   widgetWindow = createWidgetWindow({
     preloadPath,
     savedWindow: store.getConfig().window,
     onMoveResize: (bounds) => store.setWindowBounds(bounds),
-    onReady: () => widgetWindow.webContents.send('rates:updated', preRefreshSnapshot)
+    onReady: () => broadcastPairs(preRefreshSnapshot)
   });
 
-  const scheduler = createScheduler({
-    store,
-    fetchRate,
-    onRatesUpdated: (pairs) => {
-      if (widgetWindow && !widgetWindow.isDestroyed()) {
-        widgetWindow.webContents.send('rates:updated', pairs);
-      }
-    }
-  });
+  const scheduler = createScheduler({ store, fetchRate, onRatesUpdated: broadcastPairs });
 
-  registerIpcHandlers({ store, scheduler, openSettingsWindow });
+  registerIpcHandlers({ store, scheduler, openSettingsWindow, broadcastPairs });
 
   setupTray(scheduler);
   scheduler.start();

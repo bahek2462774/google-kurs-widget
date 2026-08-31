@@ -79,7 +79,7 @@ export function createStore(configPath) {
   async function addPair(from, to) {
     const id = pairId(from, to);
     if (config.pairs.some((p) => p.id === id)) {
-      return { error: 'Пара уже добавлена', pairs: config.pairs };
+      return { error: 'Пара уже добавлена', pairs: getPairs() };
     }
     config.pairs.push({
       id,
@@ -90,13 +90,27 @@ export function createStore(configPath) {
       lastStatus: 'pending'
     });
     await save();
-    return { pairs: config.pairs };
+    return { pairs: getPairs() };
   }
 
   async function removePair(id) {
     config.pairs = config.pairs.filter((p) => p.id !== id);
     await save();
-    return { pairs: config.pairs };
+    return { pairs: getPairs() };
+  }
+
+  async function reorderPairs(orderedIds) {
+    const byId = new Map(config.pairs.map((p) => [p.id, p]));
+    // Only accept a permutation of the pairs we actually have -- ignore
+    // unknown ids (stale IPC payload from a settings window that hasn't
+    // re-synced yet), and silently keep any pair missing from the given
+    // order at the end rather than dropping it.
+    const reordered = orderedIds.map((id) => byId.get(id)).filter(Boolean);
+    const seen = new Set(reordered.map((p) => p.id));
+    const remaining = config.pairs.filter((p) => !seen.has(p.id));
+    config.pairs = [...reordered, ...remaining];
+    await save();
+    return { pairs: getPairs() };
   }
 
   async function updatePairResult(id, result) {
@@ -134,6 +148,7 @@ export function createStore(configPath) {
     getPairs,
     addPair,
     removePair,
+    reorderPairs,
     updatePairResult,
     setRefreshIntervalMinutes,
     setWindowBounds
