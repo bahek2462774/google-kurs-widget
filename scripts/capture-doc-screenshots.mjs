@@ -9,7 +9,7 @@
 import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { mkdtempSync, rmSync, readFileSync, mkdirSync } from 'node:fs';
+import { mkdtempSync, rmSync, mkdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { _electron as electron } from 'playwright';
 
@@ -18,14 +18,21 @@ const projectRoot = path.join(__dirname, '..');
 const docsAssetsDir = path.join(projectRoot, 'docs', 'assets');
 mkdirSync(docsAssetsDir, { recursive: true });
 
-const fixtureHtml = readFileSync(
-  path.join(projectRoot, 'test/fixtures/google-serp-usd-rub-ru-locale.html'),
-  'utf8'
-);
+const CATALOG = [
+  { pair: 'USDRUB', label: 'US Dollar to Russian Ruble' },
+  { pair: 'EURRUB', label: 'Euro to Russian Ruble' },
+  { pair: 'GBPRUB', label: 'British Pound to Russian Ruble' },
+  { pair: 'THBRUB', label: 'Thai Baht to Russian Ruble' }
+];
 
-const server = http.createServer((_req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-  res.end(fixtureHtml);
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  if (req.url.endsWith('/pairs')) {
+    res.end(JSON.stringify({ pairs: CATALOG }));
+    return;
+  }
+  const pair = req.url.split('/').pop();
+  res.end(JSON.stringify({ pair, rate: 85.91, updatedAt: new Date().toISOString(), ageSec: 1, stale: false }));
 });
 await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
 const port = server.address().port;
@@ -36,7 +43,7 @@ const app = await electron.launch({
   args: [projectRoot],
   env: {
     ...process.env,
-    GOOGLE_BASE_URL: `http://127.0.0.1:${port}`,
+    RATE_API_BASE_URL: `http://127.0.0.1:${port}`,
     GKW_USER_DATA_DIR: userDataDir
   }
 });
@@ -54,6 +61,9 @@ try {
   await widgetWindow.evaluate(() => window.api.openSettings());
   const settingsWindow = await app.waitForEvent('window', (win) => win.url().includes('settings'));
   await settingsWindow.waitForLoadState('domcontentloaded');
+  await settingsWindow
+    .waitForFunction(() => document.getElementById('catalogSelect')?.options.length > 1, null, { timeout: 5000 })
+    .catch(() => {});
   await settingsWindow.screenshot({ path: path.join(docsAssetsDir, 'settings.png') });
   console.log('Saved docs/assets/settings.png');
 } finally {
